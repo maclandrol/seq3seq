@@ -19,10 +19,9 @@ from pytoune.framework.iterators import EpochIterator, StepIterator, _get_step_i
 
 from tensorboardX import SummaryWriter
 
-from data import collate_func ,load_config, load_dataset, read_data, tensor2string
-from const import VOCAB
-from seq3seq import Seq3Seq
-from seq3seq import loss_fn
+from seq3seq.data import collate_func ,load_config, load_dataset, read_data, tensor2string
+from seq3seq.const import VOCAB
+from seq3seq import Seq3Seq, loss_fn
 
 #CLIP = 2
 #logging.basicConfig(level=logging.DEBUG)

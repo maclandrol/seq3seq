@@ -1,6 +1,6 @@
 import torch.nn.utils.rnn as rnn_utils
 
-from commons import *
+from .commons import *
 from torch.nn import Embedding
 from torch.nn import GRU
 from torch.nn import LSTM

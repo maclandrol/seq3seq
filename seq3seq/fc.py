@@ -1,5 +1,5 @@
 from torch.nn import Linear, Sequential, ReLU, Dropout
-from commons import UnitNormLayer, ClonableModule
+from .commons import UnitNormLayer, ClonableModule
 
 class FCLayer(ClonableModule):
     def __init__(self, input_size, hidden_dims, normalize_features=True, dropout=0.):

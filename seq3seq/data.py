@@ -12,7 +12,7 @@ from rdkit import Chem
 from sklearn.model_selection import train_test_split
 from torch.utils.data.dataset import Dataset
 from torch.nn.utils.rnn import pad_sequence
-import const
+from . import const
 
 class SeqTransformer:
 

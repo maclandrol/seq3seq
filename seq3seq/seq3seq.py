@@ -2,10 +2,10 @@ import random
 import torch
 import torch.nn.utils.rnn as rnn_utils
 
-from commons import *
-from const import PADVAL, VOCAB
-from fc import FCLayer
-from rnn import RNNDecoder, RNNEncoder
+from .commons import *
+from .const import PADVAL, VOCAB
+from .fc import FCLayer
+from .rnn import RNNDecoder, RNNEncoder
 #from cnn import CNNDecoder, CNNEncoder
 from torch.nn import Embedding
 from torch.nn import GRU
