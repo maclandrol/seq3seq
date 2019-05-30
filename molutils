@@ -1,0 +1,67 @@
+#!/usr/bin/env python
+
+import click
+import pickle
+import pandas as pd
+import numpy as np
+import csv, json, os
+from rdkit import Chem
+from rdkit import RDConfig
+from rdkit.Chem import BRICS
+from rdkit.Chem import FragmentCatalog, Fragments
+from rdkit.Chem.rdmolops import RenumberAtoms
+from joblib import Parallel, delayed
+from collections import Counter
+
+
+def load_smiles(path, n):
+    if path.endswith("csv"):
+        data = pd.read_csv(path, header=0).values[:, n]
+    elif path.endswith("txt"):
+        data = pd.read_csv(path, header=None).values[:,n]
+    else:
+        with open(path,'rb') as IN:
+            data = np.asarray(pickle.load(IN))
+    return data
+
+def to_mol(mol, addHs=False, explicitOnly=True, ordered=True):
+    """convert a smiles string to a molecule"""
+    if not isinstance(mol, (str, Chem.Mol)):
+        print(mol)
+        raise ValueError("Input should be a CHem.Mol or a string")
+    if isinstance(mol, str):
+        mol = Chem.MolFromSmiles(mol)
+    # make more sense to add hydrogen before ordering
+    if mol is not None and addHs:
+        mol = Chem.AddHs(mol, explicitOnly=explicitOnly)
+    if mol and ordered:
+        new_order = Chem.rdmolfiles.CanonicalRankAtoms(mol, breakTies=True)
+        new_order = sorted([(y, x) for x, y in enumerate(new_order)])
+        mol = RenumberAtoms(mol, [y for (x, y) in new_order])
+    Chem.Kekulize(mol, clearAromaticFlags=False)
+    return mol
+
+
+@click.command()
+@click.argument('path')
+@click.option('-n', help="Position of the smiles in the dataset", type=int, default=0)
+@click.option('-out', '--outfile', default="test.txt", help='Where to save the splited dataset')
+def stat(path, n, outfile):
+    data = load_smiles(path, n)
+    data = [to_mol(sm) for sm in data]
+    atom_set = set([])
+    bond_set = set([])
+    for mol in data:
+        atom_set.update([atom.GetSymbol() for atom in mol.GetAtoms()])
+        bond_set.update([str(bond.GetBondType()) for bond in mol.GetBonds()])
+
+    with open(outfile, "w") as OUT:
+        OUT.write("ATOM_LIST = " + ",".join(atom_set)+ "\n")
+        OUT.write("BOND_TYPE = " + ",".join(bond_set))
+
+
+if __name__ == '__main__':
+    stat()
+
+
+

@@ -1,0 +1,2 @@
+ATOM_LIST = Zn,Au,K,C,Pd,Ca,S,H,Yb,Ag,Fe,B,Zr,I,Na,Nd,Br,O,Cl,Sn,Cr,Si,Tl,F,Ba,Mo,Cu,N,Mg,Hg,Co,P,Pb,As
+BOND_TYPE = SINGLE,TRIPLE,DOUBLE
